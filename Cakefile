@@ -6,7 +6,7 @@ task 'dev', ->
     flour.minifiers.disable()
 
 async task 'copy:app', (o, done) ->
-    noCompiled = (f) -> !/\.(coffee|styl)$/
+    noCompiled = (f) -> !/\.(coffee|styl)$/.test(f)
     ncp './app', './build', { filter: noCompiled }, done
 
 async task 'compile:coffee', (o, done) ->
