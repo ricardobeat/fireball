@@ -4,11 +4,11 @@
     "launch_path": "index.html",
     "description": "Explode your friends! :)",
     "icons": {
-        "16": "/Fireball/img/logo16.png",
-        "32": "/Fireball/img/logo32.png",
-        "48": "/Fireball/img/logo48.png",
-        "64": "/Fireball/img/logo64.png",
-        "128": "/Fireball/img/logo128.png"
+        "16": "/Fireball/images/logo16.png",
+        "32": "/Fireball/images/logo32.png",
+        "48": "/Fireball/images/logo48.png",
+        "64": "/Fireball/images/logo64.png",
+        "128": "/Fireball/images/logo128.png"
     },
     "developer": {
         "name": "Weird Fishes",
