@@ -10,14 +10,18 @@ class Game
 
     setupGlobalEvents: ->
         @io.sockets.on 'connection', @createPlayer
-        @io.sockets.on 'createGame', (data) ->
-            console.log data
 
     createPlayer: (socket) =>
         console.log 'Create player'
+        @playerEvents(socket)
         player = new Player(socket)
         @players[socket.id] = player
         return player
+
+    playerEvents: (socket) =>
+        socket.on 'newGame', =>
+            player = @players[socket.id]
+            @createRoom(player)
 
     events: (socket) =>
         socket.on 'createRoom', game.createRoom
@@ -25,17 +29,16 @@ class Game
     createRoom: (owner) =>
         code = 1 # (Math.random() * 1e5 | 0).toString('32').slice(-3)
         room = new Room(code)
-        @joinRoom(room, owner)
+        @joinRoom(owner, room)
         @rooms[code] = room
         return room
 
-    joinRoom: (room, player) =>
+    joinRoom: (player, room) =>
         room.add(player)
-        channel = io.of('/'+room.id)
+        channel = @io.of('/'+room.id)
+        player.socket.emit 'connectTo', room.id
         channel.on 'connection', (socket) ->
             socket.emit 'playerList', @players
-
-        player.socket.emit 'connectTo', room.id
         # channel.on 'connection', (socket) ->
             # socket.emit 'ball', -> # incoming ball
             # socket.on 'hit', (data) ->

@@ -1,7 +1,9 @@
 
 $ = Zepto
 
-socket = io.connect('http://localhost:8004')
+server_url = 'http://localhost:8004'
+
+socket = io.connect(server_url)
 
 class MainScreen extends Backbone.View
     el: '.main.screen'
@@ -36,6 +38,11 @@ app.show = (View) ->
 
 app.init = ->
     @show MainScreen
+
+    socket.on 'connectTo', (room) ->
+        url = server_url + '/' + room
+        room = io.connect(url)
+        console.log "Connecting to #{url}"
 
 ### ----------------------------------------------------------------------- ###
 
