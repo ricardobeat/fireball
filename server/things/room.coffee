@@ -13,6 +13,7 @@ class Room
     destroy: ->
         delete rooms[@id]
 
+
 ### ----------------------------------------------------------------------- ###
 
 module.exports = Room

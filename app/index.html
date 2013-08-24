@@ -6,8 +6,15 @@
     <title>Fireball</title>
 </head>
 <body>
-
-
-    <script src="js/main.js"></script>
+    <div class="main screen" hidden>
+        <button class="new-game">New game</button>
+        <button class="join-game">Join game</button>
+    </div>
+    <script src="vendor/socket.io.js"></script>
+    <script src="vendor/zepto.js"></script>
+    <script src="vendor/underscore.js"></script>
+    <script src="vendor/backbone.js"></script>
+    <script src="index.js"></script>
+    <script>window.app.init()</script>
 </body>
 </html>

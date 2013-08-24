@@ -2,41 +2,53 @@
 Player = require './things/player'
 Room   = require './things/room'
 
-game = {
-    rooms   : {}
-    players : {}
-    io      : null
-}
+class Game
+    constructor: (@io) ->
+        @rooms = {}
+        @players = {}
+        @setupGlobalEvents()
 
-game.createPlayer = (socket) ->
-    player = new Player(socket)
-    game.players[socket.id] = player
-    return player
+    setupGlobalEvents: ->
+        @io.sockets.on 'connection', @createPlayer
+        @io.sockets.on 'createGame', (data) ->
+            console.log data
 
-game.createRoom = (code, owner) ->
-    room = new Room(code)
-    room.add(owner)
-    game.rooms[code] = room
-    return room
+    createPlayer: (socket) =>
+        console.log 'Create player'
+        player = new Player(socket)
+        @players[socket.id] = player
+        return player
 
-game.joinRoom = (room, player) ->
-    channel = io.of('/'+room.id)
-    player.socket.emit 'connectTo', room.id
-    # channel.on 'connection', (socket) ->
-        # socket.emit 'ball', -> # incoming ball
-        # socket.on 'hit', (data) ->
-        #     channel.broadcast 'hit', data
+    events: (socket) =>
+        socket.on 'createRoom', game.createRoom
+
+    createRoom: (owner) =>
+        code = 1 # (Math.random() * 1e5 | 0).toString('32').slice(-3)
+        room = new Room(code)
+        @joinRoom(room, owner)
+        @rooms[code] = room
+        return room
+
+    joinRoom: (room, player) =>
+        room.add(player)
+        channel = io.of('/'+room.id)
+        channel.on 'connection', (socket) ->
+            socket.emit 'playerList', @players
+
+        player.socket.emit 'connectTo', room.id
+        # channel.on 'connection', (socket) ->
+            # socket.emit 'ball', -> # incoming ball
+            # socket.on 'hit', (data) ->
+            #     channel.broadcast 'hit', data
+
 
 # Sockets
 # -----------------------------------------------------------------------------
 
 setup = (io) ->
-    game.io = io
-    io.sockets.on 'connection', game.createPlayer
+    global.game = new Game(io)
 
 ### ----------------------------------------------------------------------- ###
-
-global.game = game
 
 module.exports = {
     setup

@@ -11,7 +11,13 @@ async task 'copy:app', (o, done) ->
 async task 'compile:coffee', (o, done) ->
     compile './app/*.coffee', './build', done
 
-task 'build', ->
+async task 'build', (o, done) ->
     invoke async 'copy:app'
     invoke async 'compile:coffee'
-    async.end -> console.log 'Build completed'
+    async.end ->
+        console.log 'Build completed'
+        done()
+
+task 'watch', ->
+    invoke 'build'
+    watch 'app/**/*', -> invoke 'build'
