@@ -7,10 +7,18 @@
     <link rel="stylesheet" href="styles/game.css" />
 </head>
 <body>
-    hey
+    <h1>Fireball</h1>
     <div class="main screen" hidden>
         <button class="new-game">New game</button>
         <button class="join-game">Join game</button>
+    </div>
+    <div class="room screen" hidden>
+        <label for="input-room">Enter room code:</label>
+        <input type="text" id="input-room" />
+        <button class="join-room">OK</button>
+    </div>
+    <div class="game screen" hidden>
+        teh game!
     </div>
     <script src="vendor/socket.io.js"></script>
     <script src="vendor/zepto.js"></script>
